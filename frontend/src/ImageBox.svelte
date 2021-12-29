@@ -40,9 +40,10 @@ import store from "./store";
   }
 
   .reasons {
-    margin-top: 20px;
+    margin: 20px auto 0 auto;
     /* width: 100%; */
-    width: 500px;
+    /* width: 500px; */
+    max-width: 300px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

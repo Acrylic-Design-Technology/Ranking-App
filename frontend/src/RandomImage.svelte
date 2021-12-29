@@ -42,6 +42,7 @@
     max-width: 200px;
     width: 100%;
     cursor: pointer;
+    margin: auto;
   }
   .brush-loader {
     width: 50px;
