@@ -33,14 +33,14 @@
 </main>
 
 <style>
-  :global(body) {
-    background: radial-gradient(
+  /* :global(body) { */
+    /* background: radial-gradient(
       circle,
       rgba(0, 19, 75, 1) 0%,
       rgba(254, 0, 0, 1) 81%,
-      rgba(200, 1, 132, 1) 100%
-    );
-  }
+      rgba(200, 1, 132, 1) 100% */
+    /* ); */
+  /* } */
 
   img {
      margin: 10px 0 10px 0;
