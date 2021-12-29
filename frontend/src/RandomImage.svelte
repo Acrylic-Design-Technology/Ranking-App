@@ -26,7 +26,7 @@
 
 <img 
   style={
-  `filter: ${anySelected ? selected ? '' : 'brightness(0.5)' : ''} grayscale(1); 
+  `filter: ${anySelected ? selected ? '' : 'brightness(0.5)' : ''}; 
   display: ${!loaded ? "none" : "block"}`} on:click={clickHandler}
   src={fetchImage}
   alt=""
