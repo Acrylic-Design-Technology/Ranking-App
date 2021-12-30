@@ -7,24 +7,32 @@ import store from "./store";
   $: selected = $store.selected == slot;
   const onClick = () => {
     $store.selected = slot;
-    // $store.selectedReason = null; // clear previous reason
   };
-  const reasons = [
-      "Detail",
-      "Stroke techniques",
-      "Many layers"
-    ];
+
+//   $: $store.selectedReasons, (() => console.log($store.selectedReasons, $store.additionalReasons))()
+
 </script>
 
 <div id="wrapper">
   <RandomImage onClick={onClick} slot={slot} />
   {#if selected}
-    <p>Optional: Why?</p>
+    <p>Why?</p>
     <div class="reasons">
-      {#each reasons as reason}
-        <button on:click={() => $store.selectedReason=reason} class={`button is-${$store.selectedReason === reason ? 'success' : 'light'}`} id="skip">{reason}</button>
+      {#each Object.keys($store.selectedReasons) as reason}
+        <button on:click={() => $store.selectedReasons[reason] = !$store.selectedReasons[reason]} 
+            class={`button is-${$store.selectedReasons[reason] ? 'success' : 'light'}`} id="skip">{reason}</button>
       {/each}
-      <input type="text" placeholder="Other" on:keyup={e => $store.selectedReason=e.target.value}>
+      <input type="text" placeholder="Other" on:keyup={e => {
+          $store.additionalReasons = e.target;
+        //   const typedOutValue = e.target.value.trim();
+        // //   if (typedOutValue.length === 0) {
+        // //       if (typedOutValue in $store.selectedReasons) {
+        // //         $store.selectedReasons[typedOutValue] = false;
+        // //       }
+        // //       return;
+        // //   };
+        //   typedOutValue.split(",").map(r => $store.additionalReasons.push(r));
+          }}>
     </div>
   {/if}
 </div>

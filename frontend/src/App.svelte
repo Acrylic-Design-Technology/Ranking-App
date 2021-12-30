@@ -10,10 +10,17 @@
   };
   const onSkip = onNext;
   const onSubmit = () => {
+
+    // get additional reason
+    $store.additionalReasons = $store.additionalReasons ? $store.additionalReasons.value.split(",") : [];
+
     // post results to backend
-    console.log($store.selected, $store.selectedReason)
+    console.log($store.selected, $store.selectedReasons, $store.additionalReasons)
     onNext();
   }
+  let canSubmit;
+  $: $store, (() => canSubmit = $store.selected && (Object.values($store.selectedReasons).find(a => a) || $store.additionalReasons))();
+  
 </script>
 
 <main>
@@ -28,7 +35,7 @@
   </div>
   <div id="ctas">
     <button class="button is-dark" id="skip" on:click={onSkip}>Skip</button>
-    <button class="button is-info" id="submit" disabled={!$store.selected} on:click={onSubmit}>Submit</button>
+    <button class="button is-info" id="submit" disabled={!canSubmit} on:click={onSubmit}>Submit</button>
   </div>
 </main>
 
