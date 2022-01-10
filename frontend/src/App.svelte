@@ -1,6 +1,6 @@
 <script lang="ts">
   import ImageBox from "./ImageBox.svelte";
-  import store, { initStore } from "./store";
+  import store, { initStore, update } from "./store";
 
   let showImages = true;
   const onNext = () => {
@@ -15,7 +15,12 @@
     $store.additionalReasons = $store.additionalReasons ? $store.additionalReasons.value.split(",") : [];
 
     // post results to backend
-    console.log($store.selected, $store.selectedReasons, $store.additionalReasons)
+    const selectedId = $store[$store.selected];
+    update($store["image-1"], $store["image-2"], selectedId, [
+      ...Object.keys($store.selectedReasons).filter(r => $store.selectedReasons[r]),
+      ...$store.additionalReasons,
+    ])
+    console.log(selectedId, $store.selectedReasons, $store.additionalReasons)
     onNext();
   }
   let canSubmit;

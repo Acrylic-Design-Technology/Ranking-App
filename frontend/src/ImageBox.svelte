@@ -1,6 +1,6 @@
 <script lang="ts">
   import RandomImage from "./RandomImage.svelte";
-import store from "./store";
+  import store from "./store";
 
   export let slot: "image-1" | "image-2";
 
@@ -8,8 +8,6 @@ import store from "./store";
   const onClick = () => {
     $store.selected = slot;
   };
-
-//   $: $store.selectedReasons, (() => console.log($store.selectedReasons, $store.additionalReasons))()
 
 </script>
 
@@ -23,16 +21,8 @@ import store from "./store";
             class={`button is-${$store.selectedReasons[reason] ? 'success' : 'light'}`} id="skip">{reason}</button>
       {/each}
       <input type="text" placeholder="Other" on:keyup={e => {
-          $store.additionalReasons = e.target;
-        //   const typedOutValue = e.target.value.trim();
-        // //   if (typedOutValue.length === 0) {
-        // //       if (typedOutValue in $store.selectedReasons) {
-        // //         $store.selectedReasons[typedOutValue] = false;
-        // //       }
-        // //       return;
-        // //   };
-        //   typedOutValue.split(",").map(r => $store.additionalReasons.push(r));
-          }}>
+        $store.additionalReasons = e.target.toLowerCase().trim()
+      }}>
     </div>
   {/if}
 </div>
