@@ -1,32 +1,51 @@
-import random
-from fastapi import FastAPI, Response
-from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
+from setup import db, app
+from elo import update_rankings
+from typing import List
+# from fastapi import FastAPI, Response
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.responses import FileResponse, HTMLResponse
+# from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
-origins = [
-    "http://localhost",
-    "http://localhost:5000",
-]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+DEFAULT_STARTING_SCORE = 5000
 
-paintings_folder = "../resized/"
+class ImageData:
+    labels: dict
+    score: int
 
-def get_random_i():
-    return int(random.random() * 6266)
-
-def get_image(i: int):
-    return f"{paintings_folder}{i}.jpg"
+def getImageFromDb(imageId) -> ImageData:
+    found = db.get(imageId)
+    if not found:
+        found = db.insert({
+            "score": DEFAULT_STARTING_SCORE,
+            "labels": {}
+        }, imageId)
     
-@app.get("/image")
-async def root(id : int = None):
-    if not id:
-        id = get_random_i()
-    response = FileResponse(get_image(id))
-    return response
+    return found
+
+@app.post("/api/update")
+async def update_image(imageAid: str, imageBid: str, selectedId: str, labels: List[str]):
+    imageA = getImageFromDb(imageAid)
+    imageB = getImageFromDb(imageBid)
+    
+    def update_labels(data: dict, labelsToAssign: List[str]) -> List[str]:
+        for lab in labelsToAssign:
+            if (lab in data['labels']):
+                data['labels'][lab] = data['labels'][lab] + 1
+            else:
+                data['labels'][lab] = 1
+                
+    if selectedId == imageAid:
+        update_labels(imageA, labels)
+    else:
+        update_labels(imageB, labels)
+    
+    new_scores = update_rankings(
+        imageA['score'],
+        imageB['score'], 
+        "A" if selectedId == imageAid else "B"
+    )
+
+    imageA['score'] = new_scores['rA']
+    imageB['score'] = new_scores['rB']
+
+    db.put_many([imageA, imageB])

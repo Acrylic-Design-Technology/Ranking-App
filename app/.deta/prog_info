@@ -1,0 +1,1 @@
+{"id":"b1bbe70c-4211-485a-b3d1-58886c2a2b9c","space":15263,"runtime":"python3.9","name":"app","path":"ml5ye4","project":"b06k0zb3","account":"144798365827","region":"us-west-1","deps":["numpy","fastapi","uvicorn","deta"],"envs":null,"public":true,"log_level":"debug","cron":""}

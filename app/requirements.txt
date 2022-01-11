@@ -1,5 +1,4 @@
-Pillow
-opencv-python
 numpy
 fastapi
 uvicorn
+deta
