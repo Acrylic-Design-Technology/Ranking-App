@@ -1,6 +1,6 @@
 <script lang="ts">
   import ImageBox from "./ImageBox.svelte";
-  import store, { initStore, update } from "./store";
+  import store, { initStore } from "./store";
 
   let showImages = true;
   const onNext = () => {
@@ -10,16 +10,18 @@
   };
   const onSkip = onNext;
   const onSubmit = () => {
-
-    // get additional reason
-    $store.additionalReasons = $store.additionalReasons ? $store.additionalReasons.value.split(",") : [];
-
     // post results to backend
     const selectedId = $store[$store.selected];
-    update($store["image-1"], $store["image-2"], selectedId, [
-      ...Object.keys($store.selectedReasons).filter(r => $store.selectedReasons[r]),
-      ...$store.additionalReasons,
-    ])
+    fetch("api/update?" + "imageAid=" + $store["image-1"] + "&imageBid=" + $store["image-2"] + "&selectedId=" + selectedId, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+    },
+      body: JSON.stringify([
+        ...Object.keys($store.selectedReasons).filter(r => $store.selectedReasons[r]).map(r => r.toLowerCase()),
+        ...$store.additionalReasons,
+      ])
+    })
     console.log(selectedId, $store.selectedReasons, $store.additionalReasons)
     onNext();
   }
@@ -29,7 +31,7 @@
 </script>
 
 <main>
-  <img src="logo.png" />
+  <img src="static/logo.png" />
   <h2 class="title is-3">Which painting is harder to paint?</h2>
   <!-- <h3 class="subtitle is-5">Paintings shown in black and white to focus on painting structure</h3> -->
   <div id="box">

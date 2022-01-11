@@ -14,14 +14,14 @@
 <div id="wrapper">
   <RandomImage onClick={onClick} slot={slot} />
   {#if selected}
-    <p>Why?</p>
+    <p class="is-size-4">Why?</p>
     <div class="reasons">
       {#each Object.keys($store.selectedReasons) as reason}
         <button on:click={() => $store.selectedReasons[reason] = !$store.selectedReasons[reason]} 
             class={`button is-${$store.selectedReasons[reason] ? 'success' : 'light'}`} id="skip">{reason}</button>
       {/each}
-      <input type="text" placeholder="Other" on:keyup={e => {
-        $store.additionalReasons = e.target.toLowerCase().trim()
+      <input type="text" placeholder="Faces, colors" on:keyup={e => {
+        $store.additionalReasons = e.target.value.toLowerCase().trim().split(",")
       }}>
     </div>
   {/if}

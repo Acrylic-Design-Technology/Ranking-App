@@ -35,7 +35,7 @@
   style={`display: ${loaded ? "none" : "block"}`}
   class="brush-loader"
   alt="Loading"
-  src="./brush.png"
+  src="static/brush.png"
 />
 <style>
   img {

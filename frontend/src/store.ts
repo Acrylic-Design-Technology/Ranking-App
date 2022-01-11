@@ -1,64 +1,60 @@
 import { writable } from "svelte/store";
-import { Deta } from "deta";
-import * as ELo from "./elo"; 
+// const { Deta } = require('deta');
+// import * as ELo from "./elo"; 
 
-// import { initializeApp } from "firebase/app";
-// import { getFirestore, collection, addDoc, getDocs, query, where} "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
+// interface ImageData {
+//     labels: string[];
+//     score: number;
+// };
 
-interface ImageData {
-    labels: string[];
-    score: number;
-};
+// const deta = Deta('b06k0zb3_26nQxCq99sodGgV75PmrmXCzW6Z45fKC');
+// const db = deta.Base('images'); 
+// const DEFAULT_STARTING_SCORE = 10000;
 
-const deta = Deta('b06k0zb3_26nQxCq99sodGgV75PmrmXCzW6Z45fKC');
-const db = deta.Base('images'); 
-const DEFAULT_STARTING_SCORE = 10000;
+// const getImageFromDb = async (imageId) : Promise<ImageData> => {
+//     let found = await db.get(imageId);
+//     if (!found) {
+//         found = await db.insert({score: DEFAULT_STARTING_SCORE, labels : {}}, imageId)
+//     }
+//     // @ts-ignore
+//     return found;
+// };
 
-const getImageFromDb = async (imageId) : Promise<ImageData> => {
-    let found = await db.get(imageId);
-    if (!found) {
-        found = await db.insert({score: DEFAULT_STARTING_SCORE, labels : {}}, imageId)
-    }
-    // @ts-ignore
-    return found;
-};
+// const updateLabels = (data: ImageData, labelsToAssign: string[]) => {
+//     const prevLabels = data.labels;
+//     const newLabels = { ...prevLabels };
+//     labelsToAssign.map(lab => {
+//         if (prevLabels.includes(lab)) {
+//             newLabels[lab] = newLabels[lab] + 1;
+//         } else {
+//             newLabels[lab] = 1;
+//         }
+//     });
+//     return newLabels;
+// }
 
-const updateLabels = (data: ImageData, labelsToAssign: string[]) => {
-    const prevLabels = data.labels;
-    const newLabels = { ...prevLabels };
-    labelsToAssign.map(lab => {
-        if (prevLabels.includes(lab)) {
-            newLabels[lab] = newLabels[lab] + 1;
-        } else {
-            newLabels[lab] = 1;
-        }
-    });
-    return newLabels;
-}
+// const update = async (imageAId, imageBId, selectedId, labels: string[]) => {
 
-export const update = async (imageAId, imageBId, selectedId, labels: string[]) => {
+//     // check if in db if not create a doc for each image
+//     const aData = await getImageFromDb(imageAId);
+//     const bData = await getImageFromDb(imageBId);
 
-    // check if in db if not create a doc for each image
-    const aData = await getImageFromDb(imageAId);
-    const bData = await getImageFromDb(imageBId);
+//     // Update labels
+//     let selected: string;
+//     if (selectedId === imageAId) {
+//         selected = "A";
+//         aData.labels = updateLabels(aData, labels);
+//     } else {
+//         selected = "B";
+//         bData.labels = updateLabels(bData, labels);
+//     };
 
-    // Update labels
-    let selected: string;
-    if (selectedId === imageAId) {
-        selected = "A";
-        aData.labels = updateLabels(aData, labels);
-    } else {
-        selected = "B";
-        bData.labels = updateLabels(bData, labels);
-    };
+//     const { rA, rB } = ELo.updateRankings(aData.score, bData.score, selected);
+//     aData.score = rA;
+//     bData.score = rB;
 
-    const { rA, rB } = ELo.updateRankings(aData.score, bData.score, selected);
-    aData.score = rA;
-    bData.score = rB;
-
-    await db.putMany([aData, bData])
-};
+//     await db.putMany([aData, bData])
+// };
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBcfaVl3tVKDlE9mNSqnJEdeJ2hNL207PA",
@@ -100,7 +96,7 @@ export const initStore = () => ({
         "Stroke techniques": false,
         "Many layers": false
     },
-    additionalReasons: null
+    additionalReasons: []
 });
 
 export default writable(initStore());
