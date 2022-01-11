@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 // const { Deta } = require('deta');
-// import * as ELo from "./elo"; 
+// import * as ELo from "./elo";
 
 // interface ImageData {
 //     labels: string[];
@@ -8,7 +8,7 @@ import { writable } from "svelte/store";
 // };
 
 // const deta = Deta('b06k0zb3_26nQxCq99sodGgV75PmrmXCzW6Z45fKC');
-// const db = deta.Base('images'); 
+// const db = deta.Base('images');
 // const DEFAULT_STARTING_SCORE = 10000;
 
 // const getImageFromDb = async (imageId) : Promise<ImageData> => {
@@ -76,27 +76,26 @@ import { writable } from "svelte/store";
 //     const q = query(scoresRef, where("image", "==", id));
 
 //     const currentScores = await getDocs(scoresRef);
-    // if doc xists
-    // currentScores.forEach(doc => {
-    //     if (doc.data().id === id) {
-    //         query
-    //     }
-    // })
+// if doc xists
+// currentScores.forEach(doc => {
+//     if (doc.data().id === id) {
+//         query
+//     }
+// })
 // }
 
 // export const analytics = getAnalytics();
 
-
 export const initStore = () => ({
-    "image-1": null,
-    "image-2": null,
-    selected: null, // image-1 or 2
-    selectedReasons: {
-        "Detail": false,
-        "Stroke techniques": false,
-        "Many layers": false
-    },
-    additionalReasons: []
+  "image-1": null,
+  "image-2": null,
+  selected: null, // image-1 or 2
+  selectedReasons: {
+    Detail: false,
+    "Stroke techniques": false,
+    "Many layers": false,
+  },
+  additionalReasons: [],
 });
 
 export default writable(initStore());

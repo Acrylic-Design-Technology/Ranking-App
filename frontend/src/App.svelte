@@ -5,29 +5,44 @@
   let showImages = true;
   const onNext = () => {
     showImages = false;
-    setTimeout(() => showImages=true, 50);
+    setTimeout(() => (showImages = true), 50);
     $store = initStore();
   };
   const onSkip = onNext;
   const onSubmit = () => {
     // post results to backend
     const selectedId = $store[$store.selected];
-    fetch("api/update?" + "imageAid=" + $store["image-1"] + "&imageBid=" + $store["image-2"] + "&selectedId=" + selectedId, {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-    },
-      body: JSON.stringify([
-        ...Object.keys($store.selectedReasons).filter(r => $store.selectedReasons[r]).map(r => r.toLowerCase()),
-        ...$store.additionalReasons,
-      ])
-    })
-    console.log(selectedId, $store.selectedReasons, $store.additionalReasons)
+    fetch(
+      "api/update?" +
+        "imageAid=" +
+        $store["image-1"] +
+        "&imageBid=" +
+        $store["image-2"] +
+        "&selectedId=" +
+        selectedId,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          ...Object.keys($store.selectedReasons)
+            .filter((r) => $store.selectedReasons[r])
+            .map((r) => r.toLowerCase()),
+          ...$store.additionalReasons,
+        ]),
+      }
+    );
+    console.log(selectedId, $store.selectedReasons, $store.additionalReasons);
     onNext();
-  }
+  };
   let canSubmit;
-  $: $store, (() => canSubmit = $store.selected && (Object.values($store.selectedReasons).find(a => a) || $store.additionalReasons))();
-  
+  $: $store,
+    (() =>
+      (canSubmit =
+        $store.selected &&
+        (Object.values($store.selectedReasons).find((a) => a) ||
+          $store.additionalReasons)))();
 </script>
 
 <main>
@@ -42,25 +57,31 @@
   </div>
   <div id="ctas">
     <button class="button is-dark" id="skip" on:click={onSkip}>Skip</button>
-    <button class="button is-info" id="submit" disabled={!canSubmit} on:click={onSubmit}>Submit</button>
+    <button
+      class="button is-info"
+      id="submit"
+      disabled={!canSubmit}
+      on:click={onSubmit}>Submit</button
+    >
   </div>
 </main>
 
 <style>
   /* :global(body) { */
-    /* background: radial-gradient(
+  /* background: radial-gradient(
       circle,
       rgba(0, 19, 75, 1) 0%,
       rgba(254, 0, 0, 1) 81%,
       rgba(200, 1, 132, 1) 100% */
-    /* ); */
+  /* ); */
   /* } */
 
   img {
-     margin: 10px 0 10px 0;
+    margin: 10px 0 10px 0;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     color: white !important;
   }
 
