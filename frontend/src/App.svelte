@@ -8,7 +8,26 @@
     setTimeout(() => (showImages = true), 50);
     $store = initStore();
   };
-  const onSkip = onNext;
+  const onSkip = () => {
+    // post results to backend
+    fetch(
+      "api/update?" +
+        "imageAid=" +
+        $store["image-1"] +
+        "&imageBid=" +
+        $store["image-2"] +
+        "&selectedId=" +
+        "None",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([]),
+      }
+    );
+    onNext();
+  };
   const onSubmit = () => {
     // post results to backend
     const selectedId = $store[$store.selected];
@@ -25,15 +44,13 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify([
-          ...Object.keys($store.selectedReasons)
+        body: JSON.stringify(
+          Object.keys($store.selectedReasons)
             .filter((r) => $store.selectedReasons[r])
-            .map((r) => r.toLowerCase()),
-          ...$store.additionalReasons,
-        ]),
+            .map((r) => r.toLowerCase())
+        ),
       }
     );
-    console.log(selectedId, $store.selectedReasons, $store.additionalReasons);
     onNext();
   };
   let canSubmit;
@@ -41,14 +58,12 @@
     (() =>
       (canSubmit =
         $store.selected &&
-        (Object.values($store.selectedReasons).find((a) => a) ||
-          $store.additionalReasons)))();
+        (Object.values($store.selectedReasons).find((a) => a))))();
 </script>
 
 <main>
   <img src="static/logo.png" />
   <h2 class="title is-3">Which painting is harder to paint?</h2>
-  <!-- <h3 class="subtitle is-5">Paintings shown in black and white to focus on painting structure</h3> -->
   <div id="box">
     {#if showImages === true}
       <ImageBox slot="image-1" />
@@ -56,7 +71,7 @@
     {/if}
   </div>
   <div id="ctas">
-    <button class="button is-dark" id="skip" on:click={onSkip}>Skip</button>
+    <button class="button is-dark" id="skip" on:click={onSkip}>Hard to tell</button>
     <button
       class="button is-info"
       id="submit"

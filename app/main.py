@@ -36,13 +36,17 @@ async def update_image(imageAid: str, imageBid: str, selectedId: str, labels: Li
                 
     if selectedId == imageAid:
         update_labels(imageA, labels)
-    else:
+        image_selected = "A"
+    elif selectedId == imageBid:
         update_labels(imageB, labels)
+        image_selected = "B"
+    else:
+        image_selected = "None"
     
     new_scores = update_rankings(
         imageA['score'],
         imageB['score'], 
-        "A" if selectedId == imageAid else "B"
+        image_selected
     )
 
     imageA['score'] = new_scores['rA']

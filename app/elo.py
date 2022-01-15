@@ -10,7 +10,7 @@ def update_rankings(rA: float, rB: float, selected: str) -> dict:
     k_factor = 42
 
     return dict(
-        rA=update_score(rA, k_factor, eA, 1 if selected == "A" else 0),
-        rB=update_score(rB, k_factor, eB, 1 if selected == "B" else 0)
+        rA=update_score(rA, k_factor, eA, 1 if selected == "A" else 0 if selected == "B" else 0.5),
+        rB=update_score(rB, k_factor, eB, 1 if selected == "B" else 0 if selected == "A" else 0.5)
     )
 
