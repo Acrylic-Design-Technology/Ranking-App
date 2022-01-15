@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from deta import Deta
 from fastapi.staticfiles import StaticFiles
@@ -24,7 +25,9 @@ app.mount("/public", StaticFiles(directory="public"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    return open("public/index.html", "r").read()
+    response = HTMLResponse(open("public/index.html", "r").read())
+    response.set_cookie('PROD', 'true' if 'DETA_PATH' in os.environ else 'false')
+    return response 
 
 def add_folder_path(foldername: str):
     @app.get(f"/{foldername}/" + "{file}", response_class=FileResponse)

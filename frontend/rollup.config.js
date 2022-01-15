@@ -6,8 +6,11 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import execute from 'rollup-plugin-execute'
 
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.PROD;
+
+console.log({production})
 
 function serve() {
 	let server;
@@ -33,7 +36,7 @@ function serve() {
 export default {
 	input: 'src/main.ts',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle.js'
@@ -67,7 +70,7 @@ export default {
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
-		!production && serve(),
+		// !production && serve(),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
@@ -75,7 +78,12 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+
+		execute([
+			'cp -r public ../app/',
+			'echo Files copied'
+		]),
 	],
 	watch: {
 		clearScreen: false
