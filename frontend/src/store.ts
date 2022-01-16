@@ -21,9 +21,12 @@ const getCookie = cname => {
 export const isProd = JSON.parse(getCookie("PROD"));
 const dummyFetch = (path: string, args: any) => {
   function row(path, args) {
-    this.url = path;
-    this.method = args.method;
     this.body = args.body;
+    const urlSearchParams = new URLSearchParams(path.replace("api/update", ""));
+    const params = Object.fromEntries(urlSearchParams.entries());
+    Object.keys(params).forEach(name => {
+      this[name] = params[name];
+    });
   }
   console.table(new row(path, args));
   return Promise.resolve();
